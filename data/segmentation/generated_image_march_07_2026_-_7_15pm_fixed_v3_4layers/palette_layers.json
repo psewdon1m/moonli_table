@@ -1,0 +1,38 @@
+{
+  "input": "C:\\.projects\\table_gen\\Generated Image March 07, 2026 - 7_15PM.jpg",
+  "detected_layers": 4,
+  "layers": [
+    {
+      "index": 1,
+      "color": "#FEFEFE",
+      "pixel_count": 3595987,
+      "coverage": 0.85735,
+      "layer_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v3_4layers\\layer_01_fefefe.png",
+      "mask_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v3_4layers\\mask_01.png"
+    },
+    {
+      "index": 2,
+      "color": "#010101",
+      "pixel_count": 433724,
+      "coverage": 0.103408,
+      "layer_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v3_4layers\\layer_02_010101.png",
+      "mask_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v3_4layers\\mask_02.png"
+    },
+    {
+      "index": 3,
+      "color": "#4690C4",
+      "pixel_count": 146866,
+      "coverage": 0.035016,
+      "layer_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v3_4layers\\layer_03_4690c4.png",
+      "mask_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v3_4layers\\mask_03.png"
+    },
+    {
+      "index": 4,
+      "color": "#F72A2F",
+      "pixel_count": 17727,
+      "coverage": 0.004226,
+      "layer_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v3_4layers\\layer_04_f72a2f.png",
+      "mask_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v3_4layers\\mask_04.png"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+mock-mask for #5BC0BE (candidate=cand_7e7e7713)

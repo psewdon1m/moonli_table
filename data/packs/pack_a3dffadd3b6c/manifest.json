@@ -1,0 +1,94 @@
+{
+  "manifest_version": "v1",
+  "pack_id": "pack_a3dffadd3b6c",
+  "source": {
+    "mode": "generate",
+    "job_id": "pal_job_d453c27243",
+    "theme": "fox",
+    "difficulty": "medium",
+    "generator_backend": "mock"
+  },
+  "composition": {
+    "candidate_id": "cand_983c72f7"
+  },
+  "palette": {
+    "colors": [
+      "#0B132B",
+      "#1C2541",
+      "#3A506B",
+      "#5BC0BE",
+      "#E0FBFC",
+      "#EE6C4D"
+    ]
+  },
+  "steps": [
+    {
+      "step_index": 1,
+      "color": "#0B132B",
+      "layer_mask": "layers/step_01_mask.txt",
+      "cumulative_state": "cumulative/step_01_state.txt"
+    },
+    {
+      "step_index": 2,
+      "color": "#1C2541",
+      "layer_mask": "layers/step_02_mask.txt",
+      "cumulative_state": "cumulative/step_02_state.txt"
+    },
+    {
+      "step_index": 3,
+      "color": "#3A506B",
+      "layer_mask": "layers/step_03_mask.txt",
+      "cumulative_state": "cumulative/step_03_state.txt"
+    },
+    {
+      "step_index": 4,
+      "color": "#5BC0BE",
+      "layer_mask": "layers/step_04_mask.txt",
+      "cumulative_state": "cumulative/step_04_state.txt"
+    },
+    {
+      "step_index": 5,
+      "color": "#E0FBFC",
+      "layer_mask": "layers/step_05_mask.txt",
+      "cumulative_state": "cumulative/step_05_state.txt"
+    },
+    {
+      "step_index": 6,
+      "color": "#EE6C4D",
+      "layer_mask": "layers/step_06_mask.txt",
+      "cumulative_state": "cumulative/step_06_state.txt"
+    }
+  ],
+  "assets": {
+    "preview": "assets/preview.txt"
+  },
+  "vector_assets": {
+    "master_svg": "vector/master.svg",
+    "color_layers": [
+      {
+        "color": "#0B132B",
+        "path": "vector/layers/0b132b.svg"
+      },
+      {
+        "color": "#1C2541",
+        "path": "vector/layers/1c2541.svg"
+      },
+      {
+        "color": "#3A506B",
+        "path": "vector/layers/3a506b.svg"
+      },
+      {
+        "color": "#5BC0BE",
+        "path": "vector/layers/5bc0be.svg"
+      },
+      {
+        "color": "#E0FBFC",
+        "path": "vector/layers/e0fbfc.svg"
+      },
+      {
+        "color": "#EE6C4D",
+        "path": "vector/layers/ee6c4d.svg"
+      }
+    ]
+  }
+}

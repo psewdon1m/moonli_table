@@ -1,0 +1,16 @@
+{
+  "session_id": "sess_7960cccb7c3b",
+  "status": "ready_for_runtime",
+  "created_at": "2026-03-07T21:23:06.483508Z",
+  "updated_at": "2026-03-07T21:23:17.043826Z",
+  "mode": "library",
+  "user_prompt": null,
+  "min_colors": 2,
+  "max_colors": 6,
+  "candidates": [],
+  "selected_candidate_id": null,
+  "palette_variants": [],
+  "selected_pack_id": "pack_29b96e2a2618",
+  "runtime_pack_path": "/app/data/runtime_cache/pack_29b96e2a2618",
+  "error": null
+}

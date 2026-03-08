@@ -1,0 +1,20 @@
+{
+  "job_id": "job_bc5dc14315eb",
+  "status": "created",
+  "created_at": "2026-03-07T14:25:34.365325Z",
+  "updated_at": "2026-03-07T14:25:34.365325Z",
+  "request": {
+    "mode": "generate",
+    "generator_backend": "comfyui",
+    "theme": "forest",
+    "difficulty": "medium",
+    "max_colors": 6,
+    "table_profile_id": "table_default",
+    "session_profile_id": "session_default"
+  },
+  "shortlist": [],
+  "selected_candidate_id": null,
+  "selected_palette": [],
+  "pack_id": null,
+  "error": null
+}

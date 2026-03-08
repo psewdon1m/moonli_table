@@ -1,0 +1,60 @@
+Metadata-Version: 2.4
+Name: table-gen
+Version: 0.1.0
+Summary: Phase 1 API-first prototype for content pack generation pipeline
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: fastapi<1.0.0,>=0.115.0
+Requires-Dist: uvicorn[standard]<1.0.0,>=0.30.0
+Requires-Dist: pydantic<3.0.0,>=2.8.0
+Requires-Dist: jsonschema<5.0.0,>=4.23.0
+
+# table_gen
+
+Локальный API-first каркас `Phase 1` для конвейера подготовки `content pack`.
+
+Текущее состояние:
+- FastAPI API для полного happy-path от `job` до `publish`.
+- Backend adapter layer (`mock`, `comfyui`) с конфигом через env.
+- Сборка `content pack` в локальный storage.
+- Валидация `manifest.json` по `JSON Schema` перед публикацией.
+- Smoke-тест happy-path через `pytest`.
+
+## Запуск без Docker
+
+```bash
+python -m venv .venv
+. .venv/Scripts/activate  # Windows PowerShell: .venv\Scripts\Activate.ps1
+pip install -e .
+uvicorn app.main:app --reload
+```
+
+API будет доступен на `http://localhost:8000`, Swagger UI на `http://localhost:8000/docs`.
+
+## Запуск через Docker Compose
+
+```bash
+docker compose up --build
+```
+
+Env переменные:
+- `TABLE_GEN_DEFAULT_BACKEND` (`mock` по умолчанию)
+- `TABLE_GEN_COMFYUI_BASE_URL` (`http://localhost:8188` по умолчанию)
+
+## Минимальный happy-path API
+
+1. `POST /jobs` - создать job.
+2. `POST /jobs/{job_id}/generate` - получить shortlist.
+3. `POST /jobs/{job_id}/selection/composition` - выбрать композицию.
+4. `POST /jobs/{job_id}/selection/palette` - выбрать палитру.
+5. `POST /jobs/{job_id}/build` - собрать `content pack`.
+6. `GET /packs/{pack_id}/validate` - проверить manifest по schema.
+7. `POST /packs/{pack_id}/publish` - опубликовать в `runtime_cache`.
+
+Сформированные файлы сохраняются локально в `data/`.
+
+## Тесты
+
+```bash
+pytest -q
+```

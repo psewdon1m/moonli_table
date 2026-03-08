@@ -1,0 +1,75 @@
+﻿<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>table_gen workflow</title>
+  <style>
+    body { font-family: sans-serif; margin: 16px; }
+    section { border: 1px solid #ccc; padding: 12px; margin-bottom: 12px; }
+    label { display: inline-block; min-width: 220px; }
+    input, select, button { margin: 4px 0; }
+    #log { white-space: pre-wrap; background: #f4f4f4; padding: 10px; min-height: 140px; }
+    .row { margin-bottom: 8px; }
+    .hidden { display: none; }
+    .box { border: 1px dashed #999; padding: 8px; margin: 6px 0; }
+    .progress { width: 480px; max-width: 100%; height: 12px; background: #e6e6e6; border: 1px solid #ccc; border-radius: 8px; overflow: hidden; }
+    .progress-bar { width: 0%; height: 100%; background: #2f7dd1; transition: width 0.35s ease; }
+    .progress-bar.error { background: #c53030; }
+    .muted { color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>table_gen workflow</h1>
+
+  <section>
+    <h2>Шаг 1: Создать сессию и выбрать режим</h2>
+    <button id="createSession">Создать сессию</button>
+    <div class="row"><label>session id</label><span id="sessionId">-</span></div>
+    <div class="row"><label>статус</label><span id="sessionStatus">-</span></div>
+    <div class="row">
+      <button id="modeLibrary">Взять готовое</button>
+      <button id="modeGenerate">Сгенерить свое</button>
+    </div>
+  </section>
+
+  <section id="libraryStep" class="hidden">
+    <h2>Шаг 2 (Library): Выбор готового рисунка</h2>
+    <button id="loadLibrary">Обновить библиотеку</button>
+    <div id="libraryContainer"></div>
+  </section>
+
+  <section id="generateStep" class="hidden">
+    <h2>Шаг 2 (Generate): Запрос и генерация 1 варианта</h2>
+    <div class="row"><label>Пользовательский запрос</label><input id="userPrompt" value="cute penguin in simple style" style="width: 420px;" /></div>
+    <div class="row"><label>Min colors (2-6)</label><input id="minColors" type="number" value="2" min="2" max="6" /></div>
+    <div class="row"><label>Max colors (2-6)</label><input id="maxColors" type="number" value="6" min="2" max="6" /></div>
+    <button id="runGenerate">Сгенерить</button>
+
+    <div id="generateProgress" class="hidden">
+      <div class="row"><label>Generation status</label><span id="generateProgressText">-</span></div>
+      <div class="progress"><div id="generateProgressBar" class="progress-bar"></div></div>
+      <div id="generateProgressHint" class="muted">Generation backend: configured on server (single candidate)</div>
+    </div>
+
+    <div id="generatedContainer"></div>
+  </section>
+
+  <section id="variantsStep" class="hidden">
+    <h2>Шаг 3-4 (Generate): авто-выбор кандидата -> векторизация -> сегментация</h2>
+    <div id="pipelineProgress" class="hidden">
+      <div class="row"><label>Pipeline status</label><span id="pipelineProgressText">-</span></div>
+      <div class="progress"><div id="pipelineProgressBar" class="progress-bar"></div></div>
+      <div class="muted">Stage 3: vectorization, Stage 4: segmentation</div>
+    </div>
+    <div id="variantContainer"></div>
+  </section>
+
+  <section>
+    <h2>Log</h2>
+    <div id="log"></div>
+  </section>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{
+  "job_id": "job_8300be298ff6",
+  "status": "published",
+  "created_at": "2026-03-07T14:08:03.946691Z",
+  "updated_at": "2026-03-07T14:08:03.968710Z",
+  "request": {
+    "mode": "generate",
+    "generator_backend": "mock",
+    "theme": "forest animal",
+    "difficulty": "medium",
+    "max_colors": 4,
+    "table_profile_id": "table_default",
+    "session_profile_id": "kids_20m"
+  },
+  "shortlist": [
+    {
+      "candidate_id": "cand_61e4a1c1",
+      "uri": "mock://candidates/job_8300be298ff6/bw_1.png",
+      "score": 0.88
+    },
+    {
+      "candidate_id": "cand_c4e7b7e1",
+      "uri": "mock://candidates/job_8300be298ff6/bw_2.png",
+      "score": 0.76
+    },
+    {
+      "candidate_id": "cand_0b3cf25f",
+      "uri": "mock://candidates/job_8300be298ff6/bw_3.png",
+      "score": 0.64
+    },
+    {
+      "candidate_id": "cand_76440086",
+      "uri": "mock://candidates/job_8300be298ff6/bw_4.png",
+      "score": 0.52
+    }
+  ],
+  "selected_candidate_id": "cand_61e4a1c1",
+  "selected_palette": [
+    "#FF0000",
+    "#00FF00",
+    "#0000FF",
+    "#FFFFFF"
+  ],
+  "pack_id": "pack_a1ec0d99ea41",
+  "error": null
+}

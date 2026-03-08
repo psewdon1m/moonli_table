@@ -1,0 +1,60 @@
+{
+  "session_id": "sess_5cb2cc97161f",
+  "status": "palette_variants_generated",
+  "created_at": "2026-03-07T22:41:57.867706Z",
+  "updated_at": "2026-03-07T22:42:14.605449Z",
+  "mode": "generate",
+  "user_prompt": "cute penguin icon",
+  "min_colors": 2,
+  "max_colors": 6,
+  "candidates": [
+    {
+      "candidate_id": "cand_96f90a1b",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00125_.png&subfolder=&type=output",
+      "score": 0.9
+    },
+    {
+      "candidate_id": "cand_61bdb526",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00127_.png&subfolder=&type=output",
+      "score": 0.8
+    },
+    {
+      "candidate_id": "cand_9585c2a0",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00129_.png&subfolder=&type=output",
+      "score": 0.7
+    },
+    {
+      "candidate_id": "cand_9a9eef5a",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00131_.png&subfolder=&type=output",
+      "score": 0.6
+    }
+  ],
+  "selected_candidate_id": "cand_96f90a1b",
+  "selected_candidate_uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00125_.png&subfolder=&type=output",
+  "palette_variants": [
+    {
+      "name": "palette_a",
+      "pack_id": "pack_2365b62cc381",
+      "pack_path": "/app/data/packs/pack_2365b62cc381",
+      "master_svg": "/app/data/packs/pack_2365b62cc381/vector/master.svg",
+      "preview_uri": "/data/packs/pack_2365b62cc381/vector/master.svg"
+    },
+    {
+      "name": "palette_b",
+      "pack_id": "pack_818840dc43e6",
+      "pack_path": "/app/data/packs/pack_818840dc43e6",
+      "master_svg": "/app/data/packs/pack_818840dc43e6/vector/master.svg",
+      "preview_uri": "/data/packs/pack_818840dc43e6/vector/master.svg"
+    },
+    {
+      "name": "palette_c",
+      "pack_id": "pack_aca9b2c11c34",
+      "pack_path": "/app/data/packs/pack_aca9b2c11c34",
+      "master_svg": "/app/data/packs/pack_aca9b2c11c34/vector/master.svg",
+      "preview_uri": "/data/packs/pack_aca9b2c11c34/vector/master.svg"
+    }
+  ],
+  "selected_pack_id": null,
+  "runtime_pack_path": null,
+  "error": null
+}

@@ -1,0 +1,60 @@
+{
+  "session_id": "sess_5421a45e0088",
+  "status": "ready_for_runtime",
+  "created_at": "2026-03-07T22:43:54.219805Z",
+  "updated_at": "2026-03-07T22:44:33.681369Z",
+  "mode": "generate",
+  "user_prompt": "delfin",
+  "min_colors": 2,
+  "max_colors": 6,
+  "candidates": [
+    {
+      "candidate_id": "cand_5a5a19f5",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00141_.png&subfolder=&type=output",
+      "score": 0.9
+    },
+    {
+      "candidate_id": "cand_7879e83d",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00143_.png&subfolder=&type=output",
+      "score": 0.8
+    },
+    {
+      "candidate_id": "cand_6e1f0699",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00145_.png&subfolder=&type=output",
+      "score": 0.7
+    },
+    {
+      "candidate_id": "cand_6e32bf54",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00147_.png&subfolder=&type=output",
+      "score": 0.6
+    }
+  ],
+  "selected_candidate_id": "cand_6e1f0699",
+  "selected_candidate_uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00145_.png&subfolder=&type=output",
+  "palette_variants": [
+    {
+      "name": "palette_a",
+      "pack_id": "pack_fbdc085052d5",
+      "pack_path": "/app/data/packs/pack_fbdc085052d5",
+      "master_svg": "/app/data/packs/pack_fbdc085052d5/vector/master.svg",
+      "preview_uri": "/data/packs/pack_fbdc085052d5/vector/master.svg"
+    },
+    {
+      "name": "palette_b",
+      "pack_id": "pack_07a66c765a4b",
+      "pack_path": "/app/data/packs/pack_07a66c765a4b",
+      "master_svg": "/app/data/packs/pack_07a66c765a4b/vector/master.svg",
+      "preview_uri": "/data/packs/pack_07a66c765a4b/vector/master.svg"
+    },
+    {
+      "name": "palette_c",
+      "pack_id": "pack_47a58e9c4fd7",
+      "pack_path": "/app/data/packs/pack_47a58e9c4fd7",
+      "master_svg": "/app/data/packs/pack_47a58e9c4fd7/vector/master.svg",
+      "preview_uri": "/data/packs/pack_47a58e9c4fd7/vector/master.svg"
+    }
+  ],
+  "selected_pack_id": "pack_47a58e9c4fd7",
+  "runtime_pack_path": "/app/data/runtime_cache/pack_47a58e9c4fd7",
+  "error": null
+}

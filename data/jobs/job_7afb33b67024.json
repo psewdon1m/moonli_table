@@ -1,0 +1,31 @@
+{
+  "job_id": "job_7afb33b67024",
+  "status": "published",
+  "created_at": "2026-03-07T14:28:55.679895Z",
+  "updated_at": "2026-03-07T14:28:55.692893Z",
+  "request": {
+    "mode": "library",
+    "generator_backend": "mock",
+    "theme": "ignored",
+    "difficulty": "medium",
+    "max_colors": 6,
+    "table_profile_id": "table_default",
+    "session_profile_id": "session_default"
+  },
+  "shortlist": [
+    {
+      "candidate_id": "pack_29b96e2a2618",
+      "uri": "C:\\.projects\\table_gen\\data\\packs\\library\\pack_29b96e2a2618\\manifest.json",
+      "score": 1.0
+    }
+  ],
+  "selected_candidate_id": "pack_29b96e2a2618",
+  "selected_palette": [
+    "#2D6A4F",
+    "#40916C",
+    "#95D5B2",
+    "#D8F3DC"
+  ],
+  "pack_id": "pack_ed6749ebbdf0",
+  "error": null
+}

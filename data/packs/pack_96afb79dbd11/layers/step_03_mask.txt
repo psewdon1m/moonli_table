@@ -1,0 +1,1 @@
+mock-mask for #3A506B (candidate=cand_8950a77e)

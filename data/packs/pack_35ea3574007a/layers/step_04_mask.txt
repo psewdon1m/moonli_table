@@ -1,0 +1,1 @@
+mock-mask for #FFFF00 (candidate=cand_9ad63a98)

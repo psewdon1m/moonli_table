@@ -1,0 +1,72 @@
+{
+  "manifest_version": "v1",
+  "pack_id": "pack_e11b2d9e7163",
+  "source": {
+    "mode": "library",
+    "job_id": "job_44eb4a2573ff",
+    "theme": "ignored",
+    "difficulty": "medium",
+    "generator_backend": "mock"
+  },
+  "composition": {
+    "candidate_id": "pack_29b96e2a2618"
+  },
+  "palette": {
+    "colors": [
+      "#2D6A4F",
+      "#40916C",
+      "#95D5B2",
+      "#D8F3DC"
+    ]
+  },
+  "steps": [
+    {
+      "step_index": 1,
+      "color": "#2D6A4F",
+      "layer_mask": "layers/step_01_mask.txt",
+      "cumulative_state": "cumulative/step_01_state.txt"
+    },
+    {
+      "step_index": 2,
+      "color": "#40916C",
+      "layer_mask": "layers/step_02_mask.txt",
+      "cumulative_state": "cumulative/step_02_state.txt"
+    },
+    {
+      "step_index": 3,
+      "color": "#95D5B2",
+      "layer_mask": "layers/step_03_mask.txt",
+      "cumulative_state": "cumulative/step_03_state.txt"
+    },
+    {
+      "step_index": 4,
+      "color": "#D8F3DC",
+      "layer_mask": "layers/step_04_mask.txt",
+      "cumulative_state": "cumulative/step_04_state.txt"
+    }
+  ],
+  "assets": {
+    "preview": "assets/preview.txt"
+  },
+  "vector_assets": {
+    "master_svg": "vector/master.svg",
+    "color_layers": [
+      {
+        "color": "#2D6A4F",
+        "path": "vector/layers/2d6a4f.svg"
+      },
+      {
+        "color": "#40916C",
+        "path": "vector/layers/40916c.svg"
+      },
+      {
+        "color": "#95D5B2",
+        "path": "vector/layers/95d5b2.svg"
+      },
+      {
+        "color": "#D8F3DC",
+        "path": "vector/layers/d8f3dc.svg"
+      }
+    ]
+  }
+}

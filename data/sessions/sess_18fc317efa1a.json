@@ -1,0 +1,37 @@
+{
+  "session_id": "sess_18fc317efa1a",
+  "status": "candidates_generated",
+  "created_at": "2026-03-07T22:25:00.761511Z",
+  "updated_at": "2026-03-07T22:25:30.842197Z",
+  "mode": "generate",
+  "user_prompt": "cute puppy",
+  "min_colors": 2,
+  "max_colors": 6,
+  "candidates": [
+    {
+      "candidate_id": "cand_51157365",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00093_.png&subfolder=&type=output",
+      "score": 0.9
+    },
+    {
+      "candidate_id": "cand_20c5bc3b",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00095_.png&subfolder=&type=output",
+      "score": 0.8
+    },
+    {
+      "candidate_id": "cand_43a3a9ae",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00097_.png&subfolder=&type=output",
+      "score": 0.7
+    },
+    {
+      "candidate_id": "cand_e1c08673",
+      "uri": "http://host.docker.internal:8000/view?filename=ComfyUI_00099_.png&subfolder=&type=output",
+      "score": 0.6
+    }
+  ],
+  "selected_candidate_id": null,
+  "palette_variants": [],
+  "selected_pack_id": null,
+  "runtime_pack_path": null,
+  "error": null
+}

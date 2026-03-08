@@ -1,0 +1,16 @@
+{
+  "session_id": "sess_24c086c210ee",
+  "status": "failed",
+  "created_at": "2026-03-07T22:03:14.702007Z",
+  "updated_at": "2026-03-07T22:08:33.967057Z",
+  "mode": "generate",
+  "user_prompt": null,
+  "min_colors": 2,
+  "max_colors": 6,
+  "candidates": [],
+  "selected_candidate_id": null,
+  "palette_variants": [],
+  "selected_pack_id": null,
+  "runtime_pack_path": null,
+  "error": "generate step failed: Server error '502 Bad Gateway' for url 'http://step-generate:8001/run'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/502"
+}

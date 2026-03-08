@@ -1,0 +1,58 @@
+{
+  "input": "C:\\.projects\\table_gen\\Generated Image March 07, 2026 - 7_15PM.jpg",
+  "size": {
+    "width": 2048,
+    "height": 2048
+  },
+  "detected_layers": 6,
+  "layers": [
+    {
+      "index": 1,
+      "color": "#FEFEFE",
+      "pixel_count": 3595867,
+      "coverage": 0.857322,
+      "layer_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\layer_01_fefefe.png",
+      "mask_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\mask_01.png"
+    },
+    {
+      "index": 2,
+      "color": "#000101",
+      "pixel_count": 432884,
+      "coverage": 0.103208,
+      "layer_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\layer_02_000101.png",
+      "mask_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\mask_02.png"
+    },
+    {
+      "index": 3,
+      "color": "#4690C4",
+      "pixel_count": 121925,
+      "coverage": 0.029069,
+      "layer_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\layer_03_4690c4.png",
+      "mask_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\mask_03.png"
+    },
+    {
+      "index": 4,
+      "color": "#538DB7",
+      "pixel_count": 20834,
+      "coverage": 0.004967,
+      "layer_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\layer_04_538db7.png",
+      "mask_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\mask_04.png"
+    },
+    {
+      "index": 5,
+      "color": "#F72A2F",
+      "pixel_count": 17393,
+      "coverage": 0.004147,
+      "layer_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\layer_05_f72a2f.png",
+      "mask_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\mask_05.png"
+    },
+    {
+      "index": 6,
+      "color": "#537394",
+      "pixel_count": 5401,
+      "coverage": 0.001288,
+      "layer_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\layer_06_537394.png",
+      "mask_path": "C:\\.projects\\table_gen\\data\\segmentation\\generated_image_march_07_2026_-_7_15pm_fixed_v2\\mask_06.png"
+    }
+  ]
+}

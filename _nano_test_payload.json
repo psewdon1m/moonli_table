@@ -1,0 +1,7 @@
+﻿{
+  "contents": [{"parts": [{"text": "simple flat penguin icon"}]}],
+  "generationConfig": {
+    "responseModalities": ["IMAGE"],
+    "imageConfig": {"aspectRatio": "1:1", "imageSize": "1K"}
+  }
+}

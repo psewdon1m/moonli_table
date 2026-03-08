@@ -1,0 +1,72 @@
+{
+  "manifest_version": "v1",
+  "pack_id": "pack_61a5d20266f6",
+  "source": {
+    "mode": "generate",
+    "job_id": "job_138eb7b5abd3",
+    "theme": "forest animal",
+    "difficulty": "medium",
+    "generator_backend": "mock"
+  },
+  "composition": {
+    "candidate_id": "cand_c483e8ad"
+  },
+  "palette": {
+    "colors": [
+      "#FF0000",
+      "#00FF00",
+      "#0000FF",
+      "#FFFFFF"
+    ]
+  },
+  "steps": [
+    {
+      "step_index": 1,
+      "color": "#FF0000",
+      "layer_mask": "layers/step_01_mask.txt",
+      "cumulative_state": "cumulative/step_01_state.txt"
+    },
+    {
+      "step_index": 2,
+      "color": "#00FF00",
+      "layer_mask": "layers/step_02_mask.txt",
+      "cumulative_state": "cumulative/step_02_state.txt"
+    },
+    {
+      "step_index": 3,
+      "color": "#0000FF",
+      "layer_mask": "layers/step_03_mask.txt",
+      "cumulative_state": "cumulative/step_03_state.txt"
+    },
+    {
+      "step_index": 4,
+      "color": "#FFFFFF",
+      "layer_mask": "layers/step_04_mask.txt",
+      "cumulative_state": "cumulative/step_04_state.txt"
+    }
+  ],
+  "assets": {
+    "preview": "assets/preview.txt"
+  },
+  "vector_assets": {
+    "master_svg": "vector/master.svg",
+    "color_layers": [
+      {
+        "color": "#FF0000",
+        "path": "vector/layers/ff0000.svg"
+      },
+      {
+        "color": "#00FF00",
+        "path": "vector/layers/00ff00.svg"
+      },
+      {
+        "color": "#0000FF",
+        "path": "vector/layers/0000ff.svg"
+      },
+      {
+        "color": "#FFFFFF",
+        "path": "vector/layers/ffffff.svg"
+      }
+    ]
+  }
+}

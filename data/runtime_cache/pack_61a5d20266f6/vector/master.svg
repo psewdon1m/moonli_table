@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <g id="FF0000">    <path d="M 590 740 L 489 823 L 406 887 L 302 843 L 247 740 L 329 663 L 405 540 L 491 654 Z" fill="#FF0000" stroke="#111111" stroke-width="3" />
+    <path d="M 611 264 L 547 379 L 432 434 L 334 361 L 270 264 L 346 178 L 431 45 L 548 147 Z" fill="#FF0000" stroke="#111111" stroke-width="3" /></g>
+  <g id="00FF00">    <path d="M 868 460 L 828 528 L 750 527 L 717 460 L 730 357 L 817 410 Z" fill="#00FF00" stroke="#111111" stroke-width="3" />
+    <path d="M 894 322 L 836 425 L 718 477 L 628 382 L 585 240 L 725 196 L 858 190 Z" fill="#00FF00" stroke="#111111" stroke-width="3" />
+    <path d="M 369 387 L 300 472 L 205 506 L 123 439 L 118 331 L 206 272 L 310 290 Z" fill="#00FF00" stroke="#111111" stroke-width="3" /></g>
+  <g id="0000FF">    <path d="M 597 552 L 508 655 L 421 754 L 313 677 L 200 619 L 237 497 L 297 398 L 407 427 L 527 433 Z" fill="#0000FF" stroke="#111111" stroke-width="3" />
+    <path d="M 602 690 L 509 766 L 433 842 L 365 757 L 293 690 L 354 611 L 433 571 L 502 620 Z" fill="#0000FF" stroke="#111111" stroke-width="3" /></g>
+  <g id="FFFFFF">    <path d="M 581 197 L 519 282 L 417 345 L 366 237 L 301 124 L 425 87 L 553 68 Z" fill="#FFFFFF" stroke="#111111" stroke-width="3" />
+    <path d="M 606 206 L 559 285 L 491 356 L 415 291 L 314 260 L 348 163 L 379 57 L 485 90 L 560 125 Z" fill="#FFFFFF" stroke="#111111" stroke-width="3" />
+    <path d="M 590 837 L 514 899 L 443 932 L 392 872 L 392 801 L 443 743 L 519 768 Z" fill="#FFFFFF" stroke="#111111" stroke-width="3" /></g>
+</svg>

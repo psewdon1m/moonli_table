@@ -1,0 +1,47 @@
+{
+  "job_id": "job_6e8263b23873",
+  "status": "published",
+  "created_at": "2026-03-08T16:36:47.260493Z",
+  "updated_at": "2026-03-08T16:36:47.275754Z",
+  "request": {
+    "mode": "generate",
+    "generator_backend": "mock",
+    "theme": "owl",
+    "difficulty": "medium",
+    "max_colors": 6,
+    "table_profile_id": "table_default",
+    "session_profile_id": "session_default"
+  },
+  "shortlist": [
+    {
+      "candidate_id": "cand_b76f0437",
+      "uri": "mock://candidates/job_6e8263b23873/bw_1.png",
+      "score": 0.88
+    },
+    {
+      "candidate_id": "cand_3b4a577e",
+      "uri": "mock://candidates/job_6e8263b23873/bw_2.png",
+      "score": 0.76
+    },
+    {
+      "candidate_id": "cand_1edc0768",
+      "uri": "mock://candidates/job_6e8263b23873/bw_3.png",
+      "score": 0.64
+    },
+    {
+      "candidate_id": "cand_3e71ad23",
+      "uri": "mock://candidates/job_6e8263b23873/bw_4.png",
+      "score": 0.52
+    }
+  ],
+  "selected_candidate_id": "cand_b76f0437",
+  "selected_candidate_uri": null,
+  "selected_palette": [
+    "#2D6A4F",
+    "#40916C",
+    "#95D5B2",
+    "#D8F3DC"
+  ],
+  "pack_id": "pack_5da932435a73",
+  "error": null
+}

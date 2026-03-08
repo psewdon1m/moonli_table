@@ -1,0 +1,39 @@
+{
+  "session_id": "sess_4d97d8bc8168",
+  "status": "candidates_generated",
+  "created_at": "2026-03-08T16:17:25.465243Z",
+  "updated_at": "2026-03-08T16:19:48.642298Z",
+  "mode": "generate",
+  "user_prompt": "test penguin",
+  "min_colors": 2,
+  "max_colors": 6,
+  "candidates": [
+    {
+      "candidate_id": "cand_8d18b77e",
+      "uri": "/data/runtime_cache/nano_banana/step_job_6ea900bad8/candidate_1.png",
+      "score": 0.9
+    },
+    {
+      "candidate_id": "cand_2d21c9a4",
+      "uri": "/data/runtime_cache/nano_banana/step_job_6ea900bad8/candidate_2.png",
+      "score": 0.8
+    },
+    {
+      "candidate_id": "cand_e59c8b14",
+      "uri": "/data/runtime_cache/nano_banana/step_job_6ea900bad8/candidate_3.png",
+      "score": 0.7
+    },
+    {
+      "candidate_id": "cand_a83de337",
+      "uri": "/data/runtime_cache/nano_banana/step_job_6ea900bad8/candidate_4.png",
+      "score": 0.6
+    }
+  ],
+  "selected_candidate_id": null,
+  "selected_candidate_uri": null,
+  "vector_preview_uri": null,
+  "palette_variants": [],
+  "selected_pack_id": null,
+  "runtime_pack_path": null,
+  "error": null
+}
