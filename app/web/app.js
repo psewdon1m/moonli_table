@@ -3,8 +3,10 @@
   session: null,
   generateProgressTimer: null,
   generateProgressValue: 0,
-  pipelineProgressTimer: null,
-  pipelineProgressValue: 0,
+  vectorizeProgressTimer: null,
+  vectorizeProgressValue: 0,
+  segmentProgressTimer: null,
+  segmentProgressValue: 0,
 };
 
 const API_BASE = window.location.port === "8080" ? "http://localhost:8010" : "";
@@ -76,28 +78,74 @@ function setGenerateUiDisabled(disabled) {
   });
 }
 
-function updateGenerateProgress(value, text) {
+function updateProgress(kind, value, text) {
   const progress = Math.max(0, Math.min(100, value));
-  state.generateProgressValue = progress;
-  $("generateProgressBar").style.width = `${progress}%`;
-  if (text) $("generateProgressText").textContent = text;
+  const barId = `${kind}ProgressBar`;
+  const textId = `${kind}ProgressText`;
+  state[`${kind}ProgressValue`] = progress;
+  $(barId).style.width = `${progress}%`;
+  if (text) $(textId).textContent = text;
 }
 
-function resetGenerateProgress() {
-  if (state.generateProgressTimer) {
-    clearInterval(state.generateProgressTimer);
-    state.generateProgressTimer = null;
+function resetProgress(kind) {
+  const timerKey = `${kind}ProgressTimer`;
+  const barId = `${kind}ProgressBar`;
+  const textId = `${kind}ProgressText`;
+  const sectionId = `${kind}Progress`;
+  if (state[timerKey]) {
+    clearInterval(state[timerKey]);
+    state[timerKey] = null;
   }
-  state.generateProgressValue = 0;
-  const bar = $("generateProgressBar");
+  state[`${kind}ProgressValue`] = 0;
+  const bar = $(barId);
   if (bar) {
     bar.classList.remove("error");
     bar.style.width = "0%";
   }
-  if ($("generateProgressText")) {
-    $("generateProgressText").textContent = "-";
+  if ($(textId)) {
+    $(textId).textContent = "-";
   }
-  showSection("generateProgress", false);
+  showSection(sectionId, false);
+}
+
+function startProgress(kind, startText, tickText) {
+  resetProgress(kind);
+  showSection(`${kind}Progress`, true);
+  const startedAt = Date.now();
+  updateProgress(kind, 4, startText);
+  state[`${kind}ProgressTimer`] = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startedAt) / 1000);
+    let next = state[`${kind}ProgressValue`];
+    if (next < 20) next += 5;
+    else if (next < 50) next += 2.2;
+    else if (next < 80) next += 1.2;
+    else if (next < 95) next += 0.5;
+    updateProgress(kind, next, `${tickText} ${elapsed}s`);
+  }, 850);
+}
+
+function finishProgressSuccess(kind) {
+  const timerKey = `${kind}ProgressTimer`;
+  if (state[timerKey]) {
+    clearInterval(state[timerKey]);
+    state[timerKey] = null;
+  }
+  $(`${kind}ProgressBar`).classList.remove("error");
+  updateProgress(kind, 100, "Completed");
+}
+
+function finishProgressError(kind, message) {
+  const timerKey = `${kind}ProgressTimer`;
+  if (state[timerKey]) {
+    clearInterval(state[timerKey]);
+    state[timerKey] = null;
+  }
+  $(`${kind}ProgressBar`).classList.add("error");
+  updateProgress(kind, state[`${kind}ProgressValue`] || 100, `Failed: ${message}`);
+}
+
+function resetGenerateProgress() {
+  resetProgress("generate");
   setGenerateUiDisabled(false);
 }
 
@@ -106,7 +154,7 @@ function startGenerateProgress() {
   showSection("generateProgress", true);
   setGenerateUiDisabled(true);
   const startedAt = Date.now();
-  updateGenerateProgress(3, "Sending request to generation service...");
+  updateProgress("generate", 3, "Sending request to generation service...");
   state.generateProgressTimer = setInterval(() => {
     const elapsed = Math.floor((Date.now() - startedAt) / 1000);
     let next = state.generateProgressValue;
@@ -114,88 +162,18 @@ function startGenerateProgress() {
     else if (next < 45) next += 3;
     else if (next < 70) next += 1.6;
     else if (next < 92) next += 0.6;
-    updateGenerateProgress(next, `Generating... ${elapsed}s`);
+    updateProgress("generate", next, `Generating... ${elapsed}s`);
   }, 900);
 }
 
 function finishGenerateProgressSuccess() {
-  if (state.generateProgressTimer) {
-    clearInterval(state.generateProgressTimer);
-    state.generateProgressTimer = null;
-  }
-  $("generateProgressBar").classList.remove("error");
-  updateGenerateProgress(100, "Completed");
+  finishProgressSuccess("generate");
   setGenerateUiDisabled(false);
 }
 
 function finishGenerateProgressError(message) {
-  if (state.generateProgressTimer) {
-    clearInterval(state.generateProgressTimer);
-    state.generateProgressTimer = null;
-  }
-  $("generateProgressBar").classList.add("error");
-  updateGenerateProgress(state.generateProgressValue || 100, `Failed: ${message}`);
+  finishProgressError("generate", message);
   setGenerateUiDisabled(false);
-}
-
-function updatePipelineProgress(value, text) {
-  const progress = Math.max(0, Math.min(100, value));
-  state.pipelineProgressValue = progress;
-  $("pipelineProgressBar").style.width = `${progress}%`;
-  if (text) $("pipelineProgressText").textContent = text;
-}
-
-function resetPipelineProgress() {
-  if (state.pipelineProgressTimer) {
-    clearInterval(state.pipelineProgressTimer);
-    state.pipelineProgressTimer = null;
-  }
-  state.pipelineProgressValue = 0;
-  const bar = $("pipelineProgressBar");
-  if (bar) {
-    bar.classList.remove("error");
-    bar.style.width = "0%";
-  }
-  if ($("pipelineProgressText")) {
-    $("pipelineProgressText").textContent = "-";
-  }
-  showSection("pipelineProgress", false);
-}
-
-function startPipelineProgress() {
-  resetPipelineProgress();
-  showSection("pipelineProgress", true);
-  const startedAt = Date.now();
-  updatePipelineProgress(4, "Starting vectorization...");
-  state.pipelineProgressTimer = setInterval(() => {
-    const elapsed = Math.floor((Date.now() - startedAt) / 1000);
-    let next = state.pipelineProgressValue;
-    if (next < 20) next += 5;
-    else if (next < 50) next += 2.2;
-    else if (next < 80) next += 1.2;
-    else if (next < 95) next += 0.5;
-    let stageText = "Vectorizing selected image...";
-    if (next >= 40) stageText = "Segmenting layers by color...";
-    updatePipelineProgress(next, `${stageText} ${elapsed}s`);
-  }, 850);
-}
-
-function finishPipelineProgressSuccess() {
-  if (state.pipelineProgressTimer) {
-    clearInterval(state.pipelineProgressTimer);
-    state.pipelineProgressTimer = null;
-  }
-  $("pipelineProgressBar").classList.remove("error");
-  updatePipelineProgress(100, "Completed");
-}
-
-function finishPipelineProgressError(message) {
-  if (state.pipelineProgressTimer) {
-    clearInterval(state.pipelineProgressTimer);
-    state.pipelineProgressTimer = null;
-  }
-  $("pipelineProgressBar").classList.add("error");
-  updatePipelineProgress(state.pipelineProgressValue || 100, `Failed: ${message}`);
 }
 
 function resetFlowViews() {
@@ -203,7 +181,8 @@ function resetFlowViews() {
   $("generatedContainer").innerHTML = "";
   $("variantContainer").innerHTML = "";
   resetGenerateProgress();
-  resetPipelineProgress();
+  resetProgress("vectorize");
+  resetProgress("segment");
 }
 
 function renderLibraryItems(items) {
@@ -250,16 +229,28 @@ function renderLibraryItems(items) {
 async function autoSelectCandidate(candidateId) {
   showSection("variantsStep", true);
   $("variantContainer").innerHTML = "";
-  startPipelineProgress();
-  const updated = await api(`/sessions/${state.sessionId}/generate/select`, {
+
+  await api(`/sessions/${state.sessionId}/generate/select`, {
     method: "POST",
     body: JSON.stringify({ candidate_id: candidateId }),
   });
-  finishPipelineProgressSuccess();
-  renderSession(updated);
-  renderVectorizedResult(updated);
+
+  startProgress("vectorize", "Starting vectorization...", "Vectorizing selected image...");
+  const afterVectorize = await api(`/sessions/${state.sessionId}/generate/vectorize`, {
+    method: "POST",
+  });
+  finishProgressSuccess("vectorize");
+  renderSession(afterVectorize);
+
+  startProgress("segment", "Starting segmentation...", "Segmenting layers by color...");
+  const afterSegment = await api(`/sessions/${state.sessionId}/generate/segment`, {
+    method: "POST",
+  });
+  finishProgressSuccess("segment");
+  renderSession(afterSegment);
+  renderVectorizedResult(afterSegment);
   showSection("variantsStep", true);
-  log("Single candidate auto-selected. Vectorize/segmentation completed", updated);
+  log("Auto pipeline completed: select -> vectorize -> segment", afterSegment);
 }
 
 async function renderGeneratedCandidates(session) {
@@ -295,8 +286,9 @@ async function renderGeneratedCandidates(session) {
   try {
     await autoSelectCandidate(candidates[0].candidate_id);
   } catch (err) {
-    finishPipelineProgressError(err.message);
-    log("Auto candidate selection failed", { error: err.message });
+    finishProgressError("vectorize", err.message);
+    finishProgressError("segment", err.message);
+    log("Auto pipeline failed", { error: err.message });
   }
 }
 
@@ -305,7 +297,7 @@ function renderVectorizedResult(session) {
   root.innerHTML = "";
   const box = document.createElement("div");
   box.className = "box";
-  box.innerHTML = `<b>Векторизация завершена</b><br/>status=${escapeHtml(session.status)}`;
+  box.innerHTML = `<b>Сегментация завершена</b><br/>status=${escapeHtml(session.status)}`;
 
   const preview = resolveApiPath(session.vector_preview_uri || "");
   if (preview) {
@@ -352,7 +344,8 @@ $("modeLibrary").onclick = async () => {
     showSection("generateStep", false);
     showSection("variantsStep", false);
     resetGenerateProgress();
-    resetPipelineProgress();
+    resetProgress("vectorize");
+    resetProgress("segment");
     const items = await api("/library/items");
     renderLibraryItems(items);
     log("Library mode selected", { items: items.length });
@@ -373,7 +366,8 @@ $("modeGenerate").onclick = async () => {
     showSection("generateStep", true);
     showSection("variantsStep", false);
     resetGenerateProgress();
-    resetPipelineProgress();
+    resetProgress("vectorize");
+    resetProgress("segment");
     $("generatedContainer").innerHTML = "";
     $("variantContainer").innerHTML = "";
     log("Generate mode selected");

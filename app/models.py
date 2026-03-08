@@ -116,6 +116,7 @@ class SessionRecord(BaseModel):
     candidates: list[CandidateImage] = Field(default_factory=list)
     selected_candidate_id: str | None = None
     selected_candidate_uri: str | None = None
+    prepared_image_path: str | None = None
     vector_preview_uri: str | None = None
     palette_variants: list[dict[str, str]] = Field(default_factory=list)
     selected_pack_id: str | None = None

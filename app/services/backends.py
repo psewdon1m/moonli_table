@@ -433,21 +433,25 @@ The result should look like a simple exportable SVG icon."""
                     "generationConfig": {
                         "responseModalities": ["IMAGE"],
                         "imageConfig": {
-                            "aspectRatio": "1:1",
-                            "imageSize": "2K",
+                            "aspectRatio": self.aspect_ratio,
+                            "imageSize": self.image_size,
                         },
                     },
                 }
                 logger.warning(
                     "nano_banana_pro request model=%s aspect=%s size=%s instruction_chars=%s prompt=%s",
                     self.model,
-                    "1:1",
-                    "2K",
+                    self.aspect_ratio,
+                    self.image_size,
                     len(self.STYLE_INSTRUCTIONS),
                     request_prompt[:120],
                 )
-                response = client.post(endpoint, json=payload, headers=headers)
-                response.raise_for_status()
+                try:
+                    response = client.post(endpoint, json=payload, headers=headers)
+                    response.raise_for_status()
+                except httpx.HTTPStatusError as exc:
+                    detail = exc.response.text[:1200] if exc.response is not None else str(exc)
+                    raise ValueError(f"nano_banana_pro generateContent rejected request: {detail}") from exc
                 data = response.json()
 
                 raw_items = self._extract_image_items(data)

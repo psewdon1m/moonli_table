@@ -57,10 +57,13 @@
 
   <section id="variantsStep" class="hidden">
     <h2>Шаг 3-4 (Generate): авто-выбор кандидата -> векторизация -> сегментация</h2>
-    <div id="pipelineProgress" class="hidden">
-      <div class="row"><label>Pipeline status</label><span id="pipelineProgressText">-</span></div>
-      <div class="progress"><div id="pipelineProgressBar" class="progress-bar"></div></div>
-      <div class="muted">Stage 3: vectorization, Stage 4: segmentation</div>
+    <div id="vectorizeProgress" class="hidden">
+      <div class="row"><label>Stage 3 (Vectorize)</label><span id="vectorizeProgressText">-</span></div>
+      <div class="progress"><div id="vectorizeProgressBar" class="progress-bar"></div></div>
+    </div>
+    <div id="segmentProgress" class="hidden">
+      <div class="row"><label>Stage 4 (Segment)</label><span id="segmentProgressText">-</span></div>
+      <div class="progress"><div id="segmentProgressBar" class="progress-bar"></div></div>
     </div>
     <div id="variantContainer"></div>
   </section>

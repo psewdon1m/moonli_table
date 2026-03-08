@@ -35,12 +35,11 @@ def health() -> dict[str, str]:
 def run_segment(payload: SegmentRequest) -> SegmentResponse:
     session_dir = DATA_DIR / "sessions" / payload.session_id / "segment"
     session_dir.mkdir(parents=True, exist_ok=True)
-    palette = ["#111111", "#2D6A4F", "#40916C", "#95D5B2", "#D8F3DC", "#F1FAEE"][: payload.layer_count]
     try:
         vector_assets = build_vector_assets(
             pack_dir=session_dir / f"base_{uuid.uuid4().hex[:8]}",
             candidate_id=payload.candidate_id,
-            palette=palette,
+            palette=[],
             source_image_uri=payload.prepared_image_path,
         )
     except Exception as exc:

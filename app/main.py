@@ -195,6 +195,17 @@ def start_generate_session(session_id: str, payload: dict) -> SessionRecord:
             response = client.post(f"{STEP_GENERATE_URL}/run", json=request_payload)
             response.raise_for_status()
             data = response.json()
+    except httpx.HTTPStatusError as exc:
+        detail = ""
+        if exc.response is not None:
+            try:
+                detail = str(exc.response.json().get("detail", ""))[:1200]
+            except Exception:
+                detail = exc.response.text[:1200]
+        session.status = "failed"
+        session.error = f"generate step failed: {detail or exc}"
+        save_session(session)
+        raise HTTPException(status_code=502, detail=session.error) from exc
     except Exception as exc:
         session.status = "failed"
         session.error = f"generate step failed: {exc}"
@@ -234,8 +245,22 @@ def select_generated_candidate(session_id: str, payload: dict[str, str]) -> Sess
 
     session.selected_candidate_id = candidate_id
     session.selected_candidate_uri = selected_candidate_uri
+    session.prepared_image_path = None
+    session.vector_preview_uri = None
     session.status = "candidate_selected"
     save_session(session)
+    return session
+
+
+@app.post("/sessions/{session_id}/generate/vectorize", response_model=SessionRecord)
+def run_generated_vectorize(session_id: str) -> SessionRecord:
+    session = load_session(session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    if session.mode != "generate" or session.status != "candidate_selected":
+        raise HTTPException(status_code=400, detail="Invalid session state for vectorize")
+    if not session.selected_candidate_id or not session.selected_candidate_uri:
+        raise HTTPException(status_code=400, detail="Selected candidate is missing")
 
     try:
         with httpx.Client(timeout=STEP_HTTP_TIMEOUT_SECONDS) as client:
@@ -243,21 +268,42 @@ def select_generated_candidate(session_id: str, payload: dict[str, str]) -> Sess
                 f"{STEP_VECTORIZE_URL}/run",
                 json={
                     "session_id": session_id,
-                    "candidate_id": candidate_id,
-                    "candidate_uri": selected_candidate_uri,
+                    "candidate_id": session.selected_candidate_id,
+                    "candidate_uri": session.selected_candidate_uri,
                     "layer_count": session.max_colors,
                 },
             )
             r_vec.raise_for_status()
             vec_payload = r_vec.json()
-            session.status = "vectorized"
-            save_session(session)
+        session.prepared_image_path = vec_payload.get("prepared_image_path")
+        session.status = "vectorized"
+        save_session(session)
+    except Exception as exc:
+        session.status = "failed"
+        session.error = f"vectorize step failed: {exc}"
+        save_session(session)
+        raise HTTPException(status_code=502, detail=session.error) from exc
+    return session
+
+
+@app.post("/sessions/{session_id}/generate/segment", response_model=SessionRecord)
+def run_generated_segment(session_id: str) -> SessionRecord:
+    session = load_session(session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    if session.mode != "generate" or session.status != "vectorized":
+        raise HTTPException(status_code=400, detail="Invalid session state for segment")
+    if not session.selected_candidate_id or not session.prepared_image_path:
+        raise HTTPException(status_code=400, detail="Vectorize output is missing")
+
+    try:
+        with httpx.Client(timeout=STEP_HTTP_TIMEOUT_SECONDS) as client:
             r_seg = client.post(
                 f"{STEP_SEGMENT_URL}/run",
                 json={
                     "session_id": session_id,
-                    "candidate_id": candidate_id,
-                    "prepared_image_path": vec_payload.get("prepared_image_path"),
+                    "candidate_id": session.selected_candidate_id,
+                    "prepared_image_path": session.prepared_image_path,
                     "layer_count": session.max_colors,
                 },
             )
@@ -269,7 +315,7 @@ def select_generated_candidate(session_id: str, payload: dict[str, str]) -> Sess
         save_session(session)
     except Exception as exc:
         session.status = "failed"
-        session.error = f"vectorize step failed: {exc}"
+        session.error = f"segment step failed: {exc}"
         save_session(session)
         raise HTTPException(status_code=502, detail=session.error) from exc
     return session
