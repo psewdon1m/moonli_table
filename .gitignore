@@ -35,6 +35,10 @@ data/
 .env.local
 .env.*.local
 
+# audio_handler secrets
+audio_handler/.env
+audio_handler/RS256_PEM_PRIVATE_KEY
+audio_handler/RS256_PEM_PUBLIC_KEY
+
 # Logs
 *.log
-

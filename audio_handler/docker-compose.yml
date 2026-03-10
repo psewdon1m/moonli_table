@@ -1,0 +1,14 @@
+services:
+  audio-handler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: table_gen_audio_handler
+    env_file:
+      - .env
+    ports:
+      - "${AUDIO_HANDLER_PORT:-8091}:8091"
+    volumes:
+      - ./RS256_PEM_PRIVATE_KEY:/app/RS256_PEM_PRIVATE_KEY:ro
+      - ./RS256_PEM_PUBLIC_KEY:/app/RS256_PEM_PUBLIC_KEY:ro
+    restart: unless-stopped
