@@ -1,16 +1,19 @@
 from __future__ import annotations
 
 import uuid
+import mimetypes
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from app.config import (
+    AUDIO_HANDLER_TIMEOUT_SECONDS,
+    AUDIO_HANDLER_URL,
     DATA_DIR,
     PACKS_DIR,
     SESSION_GENERATE_BACKEND,
@@ -65,6 +68,36 @@ app.mount("/web", StaticFiles(directory=str(WEB_DIR)), name="web")
 app.mount("/data", StaticFiles(directory=str(DATA_DIR)), name="data")
 
 
+def _normalize_audio_content_type(filename: str, content_type: str | None) -> str:
+    raw = (content_type or "").strip().lower()
+    alias_map = {
+        "application/ogg": "audio/ogg",
+        "audio/x-wav": "audio/wav",
+        "audio/x-aac": "audio/aac",
+        "audio/x-flac": "audio/flac",
+        "audio/mp3": "audio/mpeg",
+    }
+    if raw in alias_map:
+        return alias_map[raw]
+    if raw and raw != "application/octet-stream":
+        return raw
+
+    guessed, _ = mimetypes.guess_type(filename)
+    if guessed and guessed.startswith("audio/"):
+        return guessed
+
+    ext = Path(filename).suffix.lower()
+    fallback_by_ext = {
+        ".ogg": "audio/ogg",
+        ".mp3": "audio/mpeg",
+        ".wav": "audio/wav",
+        ".m4a": "audio/mp4",
+        ".aac": "audio/aac",
+        ".flac": "audio/flac",
+    }
+    return fallback_by_ext.get(ext, "application/octet-stream")
+
+
 @app.get("/")
 def frontend() -> FileResponse:
     return FileResponse(str(WEB_DIR / "index.html"))
@@ -87,6 +120,58 @@ def proxy_image(url: str) -> Response:
         raise HTTPException(status_code=502, detail=f"image proxy failed: {exc}") from exc
     media_type = r.headers.get("content-type", "application/octet-stream")
     return Response(content=r.content, media_type=media_type)
+
+
+@app.post("/audio/prompt-short")
+async def audio_prompt_short(
+    file: UploadFile = File(...),
+    session_id: str | None = Form(default=None),
+    user_id: str | None = Form(default=None),
+) -> dict:
+    filename = file.filename or "audio.bin"
+    content_type = _normalize_audio_content_type(filename, file.content_type)
+    payload = await file.read()
+    if not payload:
+        raise HTTPException(status_code=400, detail="Empty audio file")
+
+    data = {}
+    if session_id:
+        data["session_id"] = session_id
+    if user_id:
+        data["user_id"] = user_id
+
+    try:
+        async with httpx.AsyncClient(timeout=AUDIO_HANDLER_TIMEOUT_SECONDS) as client:
+            response = await client.post(
+                f"{AUDIO_HANDLER_URL.rstrip('/')}/audio/forward",
+                data=data,
+                files={"file": (filename, payload, content_type)},
+            )
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"audio handler call failed: {exc}") from exc
+
+    if response.status_code >= 400:
+        detail = response.text[:1200]
+        try:
+            parsed = response.json()
+            detail = str(parsed.get("detail", detail))
+        except Exception:
+            pass
+        raise HTTPException(status_code=502, detail=f"audio handler returned {response.status_code}: {detail}")
+
+    try:
+        body = response.json()
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"audio handler returned non-JSON response: {exc}") from exc
+
+    webhook_data = body.get("webhook_response", {}) if isinstance(body, dict) else {}
+    prompt_short = webhook_data.get("prompt_short") if isinstance(webhook_data, dict) else None
+    transcript = webhook_data.get("transcript") if isinstance(webhook_data, dict) else None
+    return {
+        "prompt_short": prompt_short,
+        "transcript": transcript,
+        "audio_handler_response": body,
+    }
 
 
 def _to_data_uri(path: str | None) -> str | None:

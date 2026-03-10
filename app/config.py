@@ -29,6 +29,8 @@ STEP_VECTORIZE_URL = os.getenv("TABLE_GEN_STEP_VECTORIZE_URL", "http://step-vect
 STEP_SEGMENT_URL = os.getenv("TABLE_GEN_STEP_SEGMENT_URL", "http://step-segment:8004")
 STEP_PALETTE_URL = os.getenv("TABLE_GEN_STEP_PALETTE_URL", "http://step-palette:8003")
 STEP_HTTP_TIMEOUT_SECONDS = float(os.getenv("TABLE_GEN_STEP_HTTP_TIMEOUT_SECONDS", "420"))
+AUDIO_HANDLER_URL = os.getenv("TABLE_GEN_AUDIO_HANDLER_URL", "http://host.docker.internal:8091")
+AUDIO_HANDLER_TIMEOUT_SECONDS = float(os.getenv("TABLE_GEN_AUDIO_HANDLER_TIMEOUT_SECONDS", "120"))
 
 
 def ensure_directories() -> None:

@@ -42,6 +42,8 @@
   <section id="generateStep" class="hidden">
     <h2>Шаг 2 (Generate): Запрос и генерация 1 варианта</h2>
     <div class="row"><label>Пользовательский запрос</label><input id="userPrompt" value="cute penguin in simple style" style="width: 420px;" /></div>
+    <div class="row"><label>Аудиофайл (опционально)</label><input id="audioPromptFile" type="file" accept="audio/*,.wav,.mp3,.ogg,.m4a,.flac,.aac" /></div>
+    <div class="row muted">Если выбран аудиофайл, в генерацию пойдет <code>prompt_short</code> из ответа n8n. Ручной промпт останется fallback.</div>
     <div class="row"><label>Min colors (2-6)</label><input id="minColors" type="number" value="2" min="2" max="6" /></div>
     <div class="row"><label>Max colors (2-6)</label><input id="maxColors" type="number" value="6" min="2" max="6" /></div>
     <button id="runGenerate">Сгенерить</button>

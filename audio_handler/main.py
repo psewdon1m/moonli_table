@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import time
+import mimetypes
 from pathlib import Path
 from typing import Any
 
@@ -33,6 +34,36 @@ N8N_JWT_AUD = os.getenv("N8N_JWT_AUD", "").strip()
 N8N_JWT_EXP_SECONDS = int(os.getenv("N8N_JWT_EXP_SECONDS", "300"))
 
 app = FastAPI(title="audio_handler", version="0.1.0")
+
+
+def _normalize_audio_content_type(filename: str, content_type: str | None) -> str:
+    raw = (content_type or "").strip().lower()
+    alias_map = {
+        "application/ogg": "audio/ogg",
+        "audio/x-wav": "audio/wav",
+        "audio/x-aac": "audio/aac",
+        "audio/x-flac": "audio/flac",
+        "audio/mp3": "audio/mpeg",
+    }
+    if raw in alias_map:
+        return alias_map[raw]
+    if raw and raw != "application/octet-stream":
+        return raw
+
+    guessed, _ = mimetypes.guess_type(filename)
+    if guessed and guessed.startswith("audio/"):
+        return guessed
+
+    ext = Path(filename).suffix.lower()
+    fallback_by_ext = {
+        ".ogg": "audio/ogg",
+        ".mp3": "audio/mpeg",
+        ".wav": "audio/wav",
+        ".m4a": "audio/mp4",
+        ".aac": "audio/aac",
+        ".flac": "audio/flac",
+    }
+    return fallback_by_ext.get(ext, "application/octet-stream")
 
 
 def _load_private_key() -> str:
@@ -71,7 +102,7 @@ async def forward_audio(
     user_id: str | None = Form(default=None),
 ) -> dict[str, Any]:
     filename = file.filename or "audio.bin"
-    content_type = file.content_type or "application/octet-stream"
+    content_type = _normalize_audio_content_type(filename, file.content_type)
     payload = await file.read()
     size = len(payload)
 

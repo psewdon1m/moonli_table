@@ -10,7 +10,7 @@ COPY README.md /app/README.md
 COPY app /app/app
 
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir fastapi "uvicorn[standard]" pydantic jsonschema httpx pillow
+    pip install --no-cache-dir fastapi "uvicorn[standard]" pydantic jsonschema httpx pillow python-multipart
 
 EXPOSE 8000
 

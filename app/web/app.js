@@ -1,6 +1,7 @@
 ﻿const state = {
   sessionId: null,
   session: null,
+  generateRequestInFlight: false,
   generateProgressTimer: null,
   generateProgressValue: 0,
   vectorizeProgressTimer: null,
@@ -47,8 +48,11 @@ function candidatePreviewUrl(originalUrl) {
 }
 
 async function api(path, options = {}) {
+  const hasExplicitHeaders = Boolean(options.headers);
+  const isFormData = typeof FormData !== "undefined" && options.body instanceof FormData;
+  const headers = hasExplicitHeaders ? options.headers : isFormData ? {} : { "Content-Type": "application/json" };
   const response = await fetch(`${API_BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
+    headers,
     ...options,
   });
   const payload = await response.json().catch(() => ({}));
@@ -387,12 +391,55 @@ $("loadLibrary").onclick = async () => {
 };
 
 $("runGenerate").onclick = async () => {
+  if (state.generateRequestInFlight) {
+    log("Generate request already in progress. Ignoring repeated click.");
+    return;
+  }
+
+  state.generateRequestInFlight = true;
+  setGenerateUiDisabled(true);
+  let generationStarted = false;
+
   try {
     if (!state.sessionId) throw new Error("Сначала создайте сессию");
-    const prompt = $("userPrompt").value.trim();
+    const manualPrompt = $("userPrompt").value.trim();
+    const audioFileInput = $("audioPromptFile");
+    const audioFile = audioFileInput && audioFileInput.files ? audioFileInput.files[0] : null;
     const minColors = Number($("minColors").value);
     const maxColors = Number($("maxColors").value);
+
+    let prompt = manualPrompt;
+    if (audioFile) {
+      log("Audio file selected. Requesting prompt_short from n8n via audio_handler...", {
+        filename: audioFile.name,
+        size_bytes: audioFile.size,
+      });
+      const form = new FormData();
+      form.append("file", audioFile);
+      form.append("session_id", state.sessionId);
+      form.append("user_id", "web_user");
+      const audioResult = await api("/audio/prompt-short", {
+        method: "POST",
+        body: form,
+      });
+      const promptShort = String(audioResult.prompt_short || "").trim();
+      const transcript = String(audioResult.transcript || "").trim();
+      if (promptShort) {
+        prompt = promptShort;
+        log("Using prompt_short from audio workflow", { prompt_short: promptShort, transcript });
+      } else if (!prompt) {
+        throw new Error("Audio processed, but prompt_short is empty and manual prompt is missing");
+      } else {
+        log("Audio response has empty prompt_short. Falling back to manual prompt.", { transcript });
+      }
+    }
+
+    if (!prompt) {
+      throw new Error("Введите промпт вручную или прикрепите аудиофайл");
+    }
+
     startGenerateProgress();
+    generationStarted = true;
     const session = await api(`/sessions/${state.sessionId}/generate/start`, {
       method: "POST",
       body: JSON.stringify({
@@ -408,5 +455,13 @@ $("runGenerate").onclick = async () => {
   } catch (err) {
     finishGenerateProgressError(err.message);
     log("Generate step failed", { error: err.message });
+  } finally {
+    state.generateRequestInFlight = false;
+    if (!generationStarted) {
+      setGenerateUiDisabled(false);
+    }
   }
 };
+
+
+
