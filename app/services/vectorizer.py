@@ -12,6 +12,8 @@ from PIL import Image, ImageFilter
 
 
 MAX_VECTOR_DIM = 768
+MIN_LAYER_SVG_BYTES = 1024
+MAX_OUTPUT_COLORS = 6
 
 
 def _is_white(color: tuple[int, int, int]) -> bool:
@@ -333,9 +335,6 @@ def _loops_to_path(loops: list[list[tuple[float, float]]]) -> str:
     for loop in loops:
         if len(loop) < 3:
             continue
-        area_abs = abs(_polygon_area(loop))
-        if area_abs < 18.0:
-            continue
         simp = _simplify_closed_loop(loop, epsilon=1.6)
         smoothed = _chaikin_closed(simp, iterations=1 if len(simp) >= 8 else 0)
         pts = smoothed if smoothed else simp
@@ -362,21 +361,34 @@ def _merge_vertical_rects(rects: list[tuple[int, int, int]]) -> list[tuple[int, 
     return merged
 
 
+def _build_clean_mask_from_rects(rects: list[tuple[int, int, int]]) -> tuple[list[bool], int, int]:
+    if not rects:
+        return [], 0, 0
+    max_x = max(x + w for x, _y, w in rects)
+    max_y = max(y for _x, y, _w in rects) + 1
+    mask = [False] * (max_x * max_y)
+    for x, y, w in rects:
+        row = y * max_x
+        for ix in range(x, x + w):
+            mask[row + ix] = True
+
+    on_pixels = sum(1 for v in mask if v)
+    min_area = max(
+        24,
+        int((max_x * max_y) * 0.00005),
+        int(on_pixels * 0.0015),
+    )
+    mask = _remove_small_components(mask=mask, width=max_x, height=max_y, min_area=min_area)
+    return mask, max_x, max_y
+
+
 def _render_layer_svg(rects: list[tuple[int, int, int]], color: str, width: int, height: int) -> str:
     lines = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">'
     ]
     path_d = ""
     if rects:
-        max_x = max(x + w for x, _y, w in rects)
-        max_y = max(y for _x, y, _w in rects) + 1
-        mask = [False] * (max_x * max_y)
-        for x, y, w in rects:
-            row = y * max_x
-            for ix in range(x, x + w):
-                mask[row + ix] = True
-        min_area = max(16, int((max_x * max_y) * 0.00003))
-        mask = _remove_small_components(mask=mask, width=max_x, height=max_y, min_area=min_area)
+        mask, max_x, max_y = _build_clean_mask_from_rects(rects)
         loops = _extract_loops_from_mask(mask=mask, width=max_x, height=max_y)
         path_d = _loops_to_path(loops)
     if path_d:
@@ -396,15 +408,7 @@ def _render_master_svg(all_layers: list[tuple[str, list[tuple[int, int, int]]]],
         lines.append(f'  <g id="{color[1:].lower()}">')
         path_d = ""
         if rects:
-            max_x = max(x + w for x, _y, w in rects)
-            max_y = max(y for _x, y, _w in rects) + 1
-            mask = [False] * (max_x * max_y)
-            for x, y, w in rects:
-                row = y * max_x
-                for ix in range(x, x + w):
-                    mask[row + ix] = True
-            min_area = max(16, int((max_x * max_y) * 0.00003))
-            mask = _remove_small_components(mask=mask, width=max_x, height=max_y, min_area=min_area)
+            mask, max_x, max_y = _build_clean_mask_from_rects(rects)
             loops = _extract_loops_from_mask(mask=mask, width=max_x, height=max_y)
             path_d = _loops_to_path(loops)
         if path_d:
@@ -524,11 +528,7 @@ def build_vector_assets(
     ]
     rgba.putdata(rgba_data)
     rgba = rgba.filter(ImageFilter.MedianFilter(size=3))
-
-    target_colors = max(1, min(6, len(palette))) if palette else 6
-    quantized = rgba.quantize(colors=target_colors, dither=Image.Dither.NONE).convert("RGBA")
-    quantized_pixels = list(quantized.getdata())
-    pixels = [(r, g, b) for (r, g, b, _a) in quantized_pixels]
+    pixels = [(r, g, b) for (r, g, b, _a) in list(rgba.getdata())]
 
     # Merge near-identical shades to avoid edge-only micro-layers (e.g. multiple whites).
     color_counts = Counter(pixels)
@@ -547,7 +547,17 @@ def build_vector_assets(
         palette_map[color] = mapped
     pixels = [palette_map[c] for c in pixels]
 
-    # Preserve original generated colors (no palette recoloring).
+    # Keep max 6 colors by occupied area (in-object pixels only).
+    merged_color_area: Counter[tuple[int, int, int]] = Counter()
+    for idx, color in enumerate(pixels):
+        if not alpha_mask[idx]:
+            continue
+        if _is_white(color):
+            continue
+        merged_color_area[color] += 1
+    top_colors = {color for color, _area in merged_color_area.most_common(MAX_OUTPUT_COLORS)}
+
+    # Preserve original generated colors (no palette recoloring) and keep stable draw order.
     color_order: list[tuple[int, int, int]] = []
     seen_colors: set[tuple[int, int, int]] = set()
     for idx, color in enumerate(pixels):
@@ -555,13 +565,14 @@ def build_vector_assets(
             continue
         if _is_white(color):
             continue
+        if color not in top_colors:
+            continue
         if color in seen_colors:
             continue
         seen_colors.add(color)
         color_order.append(color)
 
-    layer_entries: list[tuple[str, list[tuple[int, int, int]]]] = []
-    color_layers: list[dict[str, str]] = []
+    prepared_layers: list[dict] = []
     for color_rgb in color_order:
         color = "#{:02X}{:02X}{:02X}".format(*color_rgb)
         rects = _build_run_rects(
@@ -574,6 +585,26 @@ def build_vector_assets(
         if not rects:
             continue
         layer_svg = _render_layer_svg(rects=rects, color=color, width=width, height=height)
+        prepared_layers.append(
+            {
+                "color": color,
+                "rects": rects,
+                "svg": layer_svg,
+                "size_bytes": len(layer_svg.encode("utf-8")),
+            }
+        )
+
+    kept_layers = [item for item in prepared_layers if item["size_bytes"] >= MIN_LAYER_SVG_BYTES]
+    if not kept_layers and prepared_layers:
+        # Keep one dominant layer to avoid empty output on tiny/simple assets.
+        kept_layers = [max(prepared_layers, key=lambda item: item["size_bytes"])]
+
+    layer_entries: list[tuple[str, list[tuple[int, int, int]]]] = []
+    color_layers: list[dict[str, str]] = []
+    for item in kept_layers:
+        color = item["color"]
+        rects = item["rects"]
+        layer_svg = item["svg"]
         layer_name = f"{color[1:].lower()}.svg"
         (layer_dir / layer_name).write_text(layer_svg, encoding="utf-8")
         layer_entries.append((color, rects))

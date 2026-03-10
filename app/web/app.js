@@ -76,7 +76,7 @@ function showSection(id, show) {
 }
 
 function setGenerateUiDisabled(disabled) {
-  ["createSession", "modeLibrary", "modeGenerate", "runGenerate"].forEach((id) => {
+  ["createSession", "modeLibrary", "modeGenerate", "runGenerate", "clearAudioPrompt"].forEach((id) => {
     const node = $(id);
     if (node) node.disabled = disabled;
   });
@@ -388,6 +388,13 @@ $("loadLibrary").onclick = async () => {
   } catch (err) {
     log("Load library failed", { error: err.message });
   }
+};
+
+$("clearAudioPrompt").onclick = () => {
+  const audioFileInput = $("audioPromptFile");
+  if (!audioFileInput) return;
+  audioFileInput.value = "";
+  log("Audio file selection cleared.");
 };
 
 $("runGenerate").onclick = async () => {
