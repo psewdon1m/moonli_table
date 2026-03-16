@@ -1,0 +1,47 @@
+﻿
+services:
+  step-vectorize:
+    build:
+      context: .
+      dockerfile: step_vectorize/Dockerfile
+    container_name: table_gen_mac_step_vectorize
+    environment:
+      DATA_ROOT: /app/data
+    volumes:
+      - ./io:/app/data
+    expose:
+      - "8002"
+    ports:
+      - "8002:8002"
+
+  step-segment:
+    build:
+      context: .
+      dockerfile: step_segment/Dockerfile
+    container_name: table_gen_mac_step_segment
+    environment:
+      DATA_ROOT: /app/data
+    volumes:
+      - ./io:/app/data
+    expose:
+      - "8004"
+    ports:
+      - "8004:8004"
+
+  pipeline-api:
+    build:
+      context: .
+      dockerfile: pipeline_api/Dockerfile
+    container_name: table_gen_mac_pipeline_api
+    depends_on:
+      - step-vectorize
+      - step-segment
+    environment:
+      DATA_ROOT: /app/data
+      STEP_VECTORIZE_URL: http://step-vectorize:8002
+      STEP_SEGMENT_URL: http://step-segment:8004
+      STEP_TIMEOUT_SECONDS: 180
+    volumes:
+      - ./io:/app/data
+    ports:
+      - "8011:8011"
